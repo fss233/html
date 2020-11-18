@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+
+
+</head>
+<body>
+
+
+<button class="btn">ADD</button>
+
+<ul>
+    <li>123</li>
+    <li>234</li>
+    <li>345</li>
+</ul>
+
+
+
+
+<script src="jquery3.js"></script>
+
+<script>
+
+   // $("ul li").click(function () {
+   //     alert($(this).html())
+   // });
+   
+   // $("ul li").bind("click",function () {
+   //     alert($(this).html())
+   // });
+
+
+   // 事件委派
+   $("ul").on("click","li",function () {
+        alert($(this).html())
+   });
+
+   
+    $(".btn").click(function () {
+        //JS 父节点对象.appenChild(子节点对象)
+        //jq 父节点jq对象.append(子节点jq对象或者节点字符串)
+
+        $("ul").append("<li>345</li>");
+
+    });
+    
+    
+
+
+</script>
+
+</body>
+</html>
