@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="https://cdn.bootcss.com/jquery/3.4.1/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+<div class="container">
+<h3>登陆页面</h3>
+
+
+
+
+<h3>表格页面</h3>
+    <input type="button" class="f_btn" value="全选">
+    <input type="button" class="ff_btn" value="取消">
+    <input type="button" class="fff_btn" value="反选">
+    <input type="button" class="fss_btn" value="删除">
+
+<div class="row">
+    <div class="col-md-8 col-md-offset-2">
+        <table class="table table-striped table-bordered">
+            <thead>
+               <tr>
+                   <th>操作</th>
+                   <th>姓名</th>
+                   <th>年龄</th>
+                   <th>性别</th>
+               </tr>
+            </thead>
+
+            <tbody class="mytable">
+                <tr class="active">
+                    <td><input type="checkbox"></td>
+                    <td>张三</td>
+                    <td>34</td>
+                    <td>男</td>
+                </tr>
+             <tr>
+                 <td><input type="checkbox"></td>
+                    <td>李四</td>
+                    <td>34</td>
+                    <td>男</td>
+                </tr>
+                <tr class="danger">
+                    <td><input type="checkbox"></td>
+                    <td>赵六</td>
+                    <td>34</td>
+                    <td>男</td>
+                </tr>
+            </tbody>
+</table>
+    </div>
+</div>
+
+<h3>动画框</h3>
+ <div class="content col-md-5">
+        <div class="jumbotron">
+          <h1>Hello, world!</h1>
+            ...
+          <p><a class="btn btn-primary btn-lg " data-toggle="modal" data-target="#myModal" href="#" role="button">AddTable</a></p>
+        </div>
+
+
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+              </div>
+              <div class="modal-body">
+
+                    <form action="http://127.0.0.1:8000/login_new/" method="post">
+                      <div class="form-group">
+                        <label for="user">user</label>
+                        <input type="user" class="form-control" id="user" placeholder="user" name="user">
+                      </div>
+                      <div class="form-group">
+                        <label for="exampleInputPassword1">age</label>
+                        <input type="age" class="form-control" id="age" placeholder="age" name="age">
+                      </div>
+                        <div class="form-group">
+                        <label for="exampleInputPassword1">gender</label>
+                        <input type="gender" class="form-control" id="exampleInputPassword1" placeholder="gender" name="pwd">
+                      </div>
+
+
+
+                      <button type="submit" class="btn btn-default">Submit</button>
+                    </form>
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary save">SHow Datas</button>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
+<h3>后端返回</h3>
+<div>user:{{ u }}</div>
+    <div>pwd:{{ a }}</div>
+<div>pwd:{{ p }}</div>
+    <h3>DATA</h3>
+<div>{{ data }}</div>
+
+
+    <form action="http://127.0.0.1:8000/cledata/" method="post">
+            <input type="submit" class="cledata" value="清理DATA">
+    </form>
+
+</div>
+<script>
+
+    $(".save").click(function () {
+
+        $("#myModal").modal("hide");
+        // 清空操作
+        $(".mytable tr:gt(2)").remove();
+
+        //dange
+        //var $div = $("<div>{{ u }}:{{ a }}:{{ p }}</div>")
+        //$(".mytable").append($div)
+
+        //for
+        var data1 = {{data|safe}};
+        //console.log(data1);
+        //['fss:222:111', 'fanghuaiyu:222:444']
+
+        for (var i=0 ;i<data1.length;i++) {
+            //console.log(data1[i]);
+            u = data1[i].split(":")[0];
+            //console.log(u);
+            a = data1[i].split(":")[1];
+            p = data1[i].split(":")[2];
+            var arr = ["<input type='checkbox'>",u,a,p];
+
+            var $div = $("<div></div>");
+            var $tr = $("<tr class='active'><td><input type='checkbox'></td> <td class='rem'>赵六</td> <td>34</td> <td>男</td> </tr>");
+            //$div.html([u,a,p])
+            //$(".mytable").append($div);
+            $tr.children().html(function (index,ele) {
+                $(this).html(arr[index]);
+            });
+
+            $(".mytable").append($tr);
+        };
+    });
+
+    //全选
+    $(".f_btn").click(function () {
+        //$("tr td input").prop("checked",true);
+        $("tr td input").prop('checked',true);
+    });
+    //全取消
+    $(".ff_btn").click(function () {
+        $("tr td input").prop('checked',false);
+    });
+    //反选 百度的。。
+    $(".fff_btn").click(function () {
+        $("tr td input").each(function () {
+            $(this).prop("checked", function(index, attr){
+            return !attr;
+        })
+        })
+    });
+    //删除 呵呵 ，选择状态没法判定
+    $(".fss_btn").click(function () {
+        $(".mytable tr td input").each(function () {
+
+            if ($(this).attr("checked")){
+                console.log($(this));
+                $(this).parent().remove();
+            }
+    });
+    });
+
+
+    //wei pai ...
+    //    $(".mytable tr").on("click",".rem",function () {
+    //   $(this).parent().remove()
+    //});
+    $(".mytable").on("click","tr .rem",function () {
+       $(this).parent().remove()
+    });
+
+</script>
+
+</body>
+</html>
